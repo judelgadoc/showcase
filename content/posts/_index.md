@@ -1,7 +1,7 @@
 ---
 menu:
   after:
-    name: blog
+    name: integrantes
     weight: 5
-title: Blog
+title: Integrantes
 ---
