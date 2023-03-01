@@ -12,5 +12,5 @@ weight: 10
 ## Vaquitas
  Example of cute cows with P5
 
-{{< p5-iframe sketch="/visualcomputing/sketches/video-canvas.js" width="725" height="425" >}} 
+{{< p5-iframe sketch="/visualcomputing/sketches/members/member01/video-canvas.js" width="725" height="425" >}} 
 
