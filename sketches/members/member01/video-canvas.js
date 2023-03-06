@@ -1,7 +1,7 @@
 let fingers;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth-24, windowHeight-24);
   // specify multiple formats for different browsers
   fingers = createVideo(['/visualcomputing/sketches/members/member01/cute_little_moo.mp4']);
   fingers.hide(); // by default video shows up in separate dom
