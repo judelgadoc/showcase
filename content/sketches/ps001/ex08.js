@@ -106,6 +106,7 @@ function keyPressed() {
   }
 }
 
+/*      //fill(average([obj.pixels[offset], obj.pixels[offset+4], obj.pixels[offset-4]]), obj.pixels[offset + 1], obj.pixels[offset + 2]);
 function Pixelate(startX, startY, endX, endY, pSize) {
   obj.loadPixels();
   for (let x = startX; x < endX; x += pixelSize) {
@@ -122,6 +123,28 @@ function Pixelate(startX, startY, endX, endY, pSize) {
         fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
         rect(x, y, pSize, pSize);
       }
+    }
+  }
+}*/
+
+function Pixelate(startX, startY, endX, endY, pSize) {
+  obj.loadPixels();
+  for (let x = startX; x < endX; x += pixelSize) {
+    for (let y = startY; y < endY; y += pixelSize) {
+      let offset = ((y * width) + x) * 4;
+        const average = (array) => array.reduce((a, b) => a + b) / array.length;
+    if(isCircle) {
+        fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
+    } else {
+
+        fill(255, obj.pixels[offset + 1], obj.pixels[offset + 2]);
+        /*
+      fill(average([obj.pixels[offset], obj.pixels[offset+4], obj.pixels[offset-4]], 255), 
+          average([obj.pixels[offset + 1], obj.pixels[offset+4+1], obj.pixels[offset-4+1]]), 
+          average([obj.pixels[offset + 2], obj.pixels[offset+4+2], obj.pixels[offset-4+2]]));
+          */
+    }
+      rect(x, y, pSize, pSize);
     }
   }
 }
