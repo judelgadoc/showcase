@@ -7,7 +7,7 @@ press:
   m or M to mute / unmute
   , to decrease pixel size
   . to increase pixel size
-  1 to switch between square / circular pixels
+  t to switch original, spatial coherence and average
 simply change the string in load to get to the file
 
 
@@ -20,11 +20,10 @@ p5.disableFriendlyErrors = true;
 
 let obj;
 let pixelSize = 5;
-let isCircle = false;
-let isVid = false;
+let toggle = 0; // 0: original, 1: spatial coherence, 2: average
+const modeText = ["Original", "Spatial C.", "Average"]
 let vW = 0; // video heigh and width, automatically set
 let vH = 0;
-//let load = "/visualcomputing/sketches/ps001/p23.jpg"
 let load = "/visualcomputing/sketches/members/member01/cute_little_moo.mp4"
 let isMute = false;
 let isPause = false;
@@ -34,50 +33,50 @@ function preload() {
 }
 
 function setup() {
-  print(vW, vH);
-  createCanvas(vW, vH);
-  print("width:", width);
-  print("height:", height);
+  createCanvas(720-24, 740-40);
+  vW = 720-24;
+  vH = 740-40;
+  obj.size(vW, vH)
   noStroke();
   background(0);
-  //gif.position(0,0);
-  obj.loop();
-  obj.hide();
-}
-
-getVideoDimensionsOf(load).then(({
-  width,
-  height
-}) => {
-  vW = width;
-  vH = height;
-  print("vd" +  " " + vW + " " +vH);
-  reset();
-  //setup();
-
-});
-
-function reset() {
-  createCanvas(vW, vH);
+    frameRate(10000);
   obj.loop();
   obj.hide();
 }
 
 /*
-function reset() {
-  preload();
-  setc();
-}
+getVideoDimensionsOf(load).then( ({width, height}) => {
+  vW = width;
+  vH = height;
+  reset();
+});
 */
 
+function reset() {
+  createCanvas(vW, vH);
+  obj.loop();
+  obj.hide();
+}
+
+
 function draw() {
-  Pixelate(0, 0, width, height, pixelSize);
-  //unPixelate();
+    if (toggle === 0) {
+  image(obj, 0, 0);
+    textSize(50)
+    fill(255, 0, 0)
+    text(modeText[toggle], 10, 50)
+    text(round(frameRate()), 630, 50)
+    } else
+  Pixelate(0, 0, vW, vH, pixelSize);
+    textSize(50)
+    fill(255, 0, 0)
+    text(modeText[toggle], 10, 50)
+    text(round(frameRate()), 630, 50)
 }
 
 function keyPressed() {
-  if (key === '1') {
-    isCircle = !isCircle;
+  if (key === 't' || key === 'T') {
+      toggle = (toggle + 1) % 3
   }
   if (key === ',') {
     pixelSize = max(4, pixelSize - 2);
@@ -106,77 +105,29 @@ function keyPressed() {
   }
 }
 
-/*      //fill(average([obj.pixels[offset], obj.pixels[offset+4], obj.pixels[offset-4]]), obj.pixels[offset + 1], obj.pixels[offset + 2]);
-function Pixelate(startX, startY, endX, endY, pSize) {
-  obj.loadPixels();
-  for (let x = startX; x < endX; x += pixelSize) {
-    for (let y = startY; y < endY; y += pixelSize) {
-      let offset = ((y * width) + x) * 4;
-      if (isCircle) {
-      	//math for determining the pixel density
-        let dim = 80;
-        fill(obj.pixels[offset] - dim, obj.pixels[offset + 1] - dim, obj.pixels[offset + 2] - dim);
-        rect(x, y, pSize, pSize);
-        fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
-        ellipse(x + pSize / 2, y + pSize / 2, pSize, pSize);
-      } else {
-        fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
-        rect(x, y, pSize, pSize);
-      }
-    }
-  }
-}*/
 
 function Pixelate(startX, startY, endX, endY, pSize) {
   obj.loadPixels();
   for (let x = startX; x < endX; x += pixelSize) {
     for (let y = startY; y < endY; y += pixelSize) {
-      let offset = ((y * width) + x) * 4;
+      let offset = ((y * vW) + x) * 4;
         const average = (array) => array.reduce((a, b) => a + b) / array.length;
-    if(isCircle) {
+    if(toggle === 1) {
         fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
-    } else {
-
-        fill(255, obj.pixels[offset + 1], obj.pixels[offset + 2]);
-        /*
-      fill(average([obj.pixels[offset], obj.pixels[offset+4], obj.pixels[offset-4]], 255), 
-          average([obj.pixels[offset + 1], obj.pixels[offset+4+1], obj.pixels[offset-4+1]]), 
-          average([obj.pixels[offset + 2], obj.pixels[offset+4+2], obj.pixels[offset-4+2]]));
-          */
+    } else if (toggle === 2) {
+      fill(average([obj.pixels[offset-vW*4-4], obj.pixels[offset-vW*4], obj.pixels[offset-vW*4+4], 
+                    obj.pixels[offset-4], obj.pixels[offset], obj.pixels[offset+4],
+                    obj.pixels[offset+vW*4-4], obj.pixels[offset+vW*4], obj.pixels[offset+vW*4+4]]),
+           average([obj.pixels[offset-vW*4-4+1], obj.pixels[offset-vW*4+1], obj.pixels[offset-vW*4+4+1], 
+                    obj.pixels[offset-4+1], obj.pixels[offset+1], obj.pixels[offset+4+1],
+                    obj.pixels[offset+vW*4-4+1], obj.pixels[offset+vW*4+1], obj.pixels[offset+vW*4+4+1]]),
+           average([obj.pixels[offset-vW*4-4+2], obj.pixels[offset-vW*4+2], obj.pixels[offset-vW*4+4+2], 
+                    obj.pixels[offset-4+2], obj.pixels[offset+2], obj.pixels[offset+4+2],
+                    obj.pixels[offset+vW*4-4+2], obj.pixels[offset+vW*4+2], obj.pixels[offset+vW*4+4+2]])
+      );
     }
       rect(x, y, pSize, pSize);
     }
   }
 }
 
-function unPixelate() {
-  background(0);
-  image(obj, width, 0);
-}
-
-/**
- Returns the dimensions of a video asynchrounsly.
- @param {String} url Url of the video to get dimensions from.
- @return {Promise} Promise which returns the dimensions of the video in 'width' and 'height' properties.
- */
-function getVideoDimensionsOf(url) {
-  return new Promise(function(resolve) {
-    // create the video element
-    let video = document.createElement('video');
-
-    // place a listener on it
-    video.addEventListener("loadedmetadata", function() {
-      // retrieve dimensions
-      let height = this.videoHeight;
-      let width = this.videoWidth;
-      // send back result
-      resolve({
-        height: height,
-        width: width
-      });
-    }, false);
-
-    // start download meta-datas
-    video.src = url;
-  });
-}
