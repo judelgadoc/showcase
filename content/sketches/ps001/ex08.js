@@ -11,7 +11,7 @@ press:
 simply change the string in load to get to the file
 
 
-[1]: https://github.com/mfmyip/Pixelator
+[1]: Based on https://github.com/mfmyip/Pixelator
 */
 p5.disableFriendlyErrors = true;
 
@@ -100,7 +100,7 @@ function Pixelate(startX, startY, endX, endY, pSize) {
     for (let x = startX; x < endX; x += pixelSize) {
         for (let y = startY; y < endY; y += pixelSize) {
             let offset = ((y * vW) + x) * 4;
-            const average = (array) => array.reduce((a, b) => a + b) / array.length;
+            //const average = (array) => array.reduce((a, b) => a + b) / array.length;
             if (toggle === 1) {
                 fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
             } else if (toggle === 2) {
@@ -121,4 +121,16 @@ function Pixelate(startX, startY, endX, endY, pSize) {
             rect(x, y, pSize, pSize);
         }
     }
+}
+
+function average(arr) {
+    let ans = 0;
+    let n = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] != null) {
+            ans += arr[i];
+            n += 1;
+        }
+    }
+    return ans/n;
 }
