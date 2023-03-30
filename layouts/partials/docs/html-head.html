@@ -1,0 +1,69 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ default .Summary .Description }}">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark">
+
+{{- with .Page.Params.BookHref -}}
+  <meta http-equiv="Refresh" content="0; url='{{ . }}'" />
+{{- end -}}
+
+{{- template "_internal/opengraph.html" . -}}
+
+<title>{{ partial "docs/html-head-title" . }}</title>
+
+{{- $manifest := resources.Get "manifest.json" | resources.ExecuteAsTemplate "manifest.json" . }}
+<link rel="manifest" href="{{ $manifest.RelPermalink }}">
+<link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/x-icon">
+
+{{- range .Translations }}
+  <link rel="alternate" hreflang="{{ default .Language.Lang .Site.LanguageCode }}" href="{{ .Permalink }}" title="{{ partial "docs/title" . }}">
+{{- end -}}
+
+<!-- Theme stylesheet, you can customize scss by creating `assets/custom.scss` in your website -->
+{{- $styles := resources.Get "book.scss" | resources.ExecuteAsTemplate "book.scss" . | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $styles.RelPermalink }}" {{ template "integrity" $styles }}>
+
+{{- if default true .Site.Params.BookSearch -}}
+  {{- $searchJSFile := printf "%s.search.js" .Language.Lang }}
+  {{- $searchJS := resources.Get "search.js" | resources.ExecuteAsTemplate $searchJSFile . | resources.Minify | resources.Fingerprint }}
+  <script defer src="{{ "flexsearch.min.js" | relURL }}"></script>
+  <script defer src="{{ $searchJS.RelPermalink }}" {{ template "integrity" $searchJS }}></script>
+{{ end -}}
+
+{{- if .Site.Params.BookServiceWorker -}}
+  {{- $swJS := resources.Get "sw-register.js" | resources.ExecuteAsTemplate "sw.js" . | resources.Minify | resources.Fingerprint }}
+  <script defer src="{{ $swJS.RelPermalink }}" {{ template "integrity" $swJS }}></script>
+{{ end -}}
+
+{{- template "_internal/google_analytics.html" . -}}
+
+<!-- RSS -->
+{{- with .OutputFormats.Get "rss" -}}
+  {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+{{ end -}}
+
+{{ "<!--" | safeHTML }}
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+{{ "-->" | safeHTML }}
+
+{{- define "integrity" -}}
+  {{- if (urls.Parse .Permalink).Host -}}
+    integrity="{{ .Data.Integrity }}" crossorigin="anonymous"
+  {{- end -}}
+{{- end -}}
+
+<!--- Modified head for scripts --->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-okaidia.min.css" integrity="sha512-5HvW0a7ihK3ro2KhwEksDHXgIezsTeZybZDIn8d8Y015Ny+t7QWSIjnlCTjFzlK7Klb604HLGjsNqU/i5mJLjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.min.css" integrity="sha512-3/cdM9qaJ5lBlzRKqwhMw+ZcNCVonz66BO6HgJudG/P1azm9wFrru31SsBa4T4Ew1AOH8HfDXSWS6emWwPl42A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js" integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-QTYXYEniHb1m0ZKtSyfpmw40uH9vPfV07vxsv/plIRMEiON4yOp2qoZiv/FTqFIOym4bdQ4+p9RtHaCMC0ApRw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+.line-numbers-rows > span {
+  display: block;
+  counter-increment: linenumber;
+  line-height: 1.5rem; // add this
+}
+</style>

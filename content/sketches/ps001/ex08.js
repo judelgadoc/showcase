@@ -7,7 +7,8 @@ press:
   m or M to mute / unmute
   , to decrease pixel size
   . to increase pixel size
-  t to switch original, spatial coherence and average
+  t or T to switch original, spatial coherence and average
+  space to take a snapshot
 simply change the string in load to get to the file
 
 
@@ -24,6 +25,7 @@ let vH = 0;
 let load = "/visualcomputing/sketches/members/member01/cute_little_moo.mp4"
 let isMute = false;
 let isPause = false;
+let frameRates = [0];
 
 function preload() {
     obj = createVideo(load);
@@ -47,31 +49,30 @@ function reset() {
     obj.hide();
 }
 
-
 function draw() {
-    if (toggle === 0) {
+    if (toggle === 0) 
         image(obj, 0, 0);
-        textSize(50)
-        fill(255, 0, 0)
-        text(modeText[toggle], 10, 50)
-        text(round(frameRate()), 630, 50)
-    } else
+    else
         Pixelate(0, 0, vW, vH, pixelSize);
+    frameRates.push(frameRate());
     textSize(50)
     fill(255, 0, 0)
     text(modeText[toggle], 10, 50)
-    text(round(frameRate()), 630, 50)
+    text(round(average(frameRates)), 630, 50)
 }
 
 function keyPressed() {
     if (key === 't' || key === 'T') {
-        toggle = (toggle + 1) % 3
+        toggle = (toggle + 1) % 3;
+        frameRates = [0];
     }
     if (key === ',') {
         pixelSize = max(4, pixelSize - 2);
+        frameRates = [0];
     }
     if (key === '.') {
         pixelSize = min(50, pixelSize + 2);
+        frameRates = [0];
     }
     if (key === 'm' || key === 'M') {
         isMute = !isMute;
@@ -94,13 +95,11 @@ function keyPressed() {
     }
 }
 
-
 function Pixelate(startX, startY, endX, endY, pSize) {
     obj.loadPixels();
     for (let x = startX; x < endX; x += pixelSize) {
         for (let y = startY; y < endY; y += pixelSize) {
             let offset = ((y * vW) + x) * 4;
-            //const average = (array) => array.reduce((a, b) => a + b) / array.length;
             if (toggle === 1) {
                 fill(obj.pixels[offset], obj.pixels[offset + 1], obj.pixels[offset + 2]);
             } else if (toggle === 2) {
