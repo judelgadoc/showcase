@@ -6,7 +6,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth - 15, windowHeight - 25);
   fft = new p5.FFT();
   song.play();
 }
