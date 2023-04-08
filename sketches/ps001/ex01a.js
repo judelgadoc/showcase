@@ -2,7 +2,7 @@ let song;
 let fft;
 
 function preload() {
-  song = loadSound("/visualcomputing/sketches/ps001/songa.mp3");
+  song = loadSound("/visualcomputing/sketches/ps001/song.mp3");
 }
 
 function setup() {
