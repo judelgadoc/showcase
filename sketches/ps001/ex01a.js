@@ -1,5 +1,7 @@
 let song;
 let fft;
+let isPause = false;
+let isMute = false;
 
 function preload() {
   song = loadSound("/visualcomputing/sketches/ps001/song.mp3");
@@ -22,4 +24,15 @@ function draw() {
     fill(amp, 255, 255);
     rect(x, y, width / spectrum.length, height - y);
   }
+}
+
+function keyPressed() {
+    if (key === 'p' || key === 'P') {
+        isPause = !isPause;
+        if (isPause) {
+            song.pause();
+        } else {
+            song.play();
+        }
+    }
 }
