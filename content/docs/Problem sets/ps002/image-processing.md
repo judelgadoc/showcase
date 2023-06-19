@@ -37,7 +37,7 @@ El profesor publica abiertamente el fragment shader de su app, pero el código n
 
 
 #### Recuperando el código fuente
-Conocemos dos métodos para recuperar el código del profesor directamente desde su página
+Conocemos dos métodos para recuperar el código del profesor directamente desde su página.
 
 - Investigar las fuentes de la página
     1. Abrir las herramientas de desarrollo
@@ -102,7 +102,7 @@ Para el efecto negativo sencillamente le restamos a 1 cada componente de color, 
 
 Intentamos encontrar efectos de lupa usando shaders, pero ninguno de los códigos que encontramos en nuestra investigación parecía compatible con nuestros navegadores, por lo tanto, decidimos intentar buscar una versión que no utilizara shaders. 
 
-Encontramos un código muy interesante [^3], el cual consistía en un amplificador de píxeles
+Encontramos un código muy interesante [^3], el cual consistía en un amplificador de píxeles.
 
 {{< details "Amplificador de pixeles" >}}
 <iframe src="https://toolness.github.io/p5.js-widget/p5-widget.html?id=6&amp;previewWidth=300&amp;baseSketchURL=https%3A%2F%2Fhappycoding.io%2Ftutorials%2Fp5js%2Fnull&amp;p5version=1.0.0&amp;sketch=%0Alet%20img%3B%0A%0Afunction%20setup()%20%7B%0A%20%20createCanvas(300%2C%20300)%3B%0A%20%20img%20%3D%20loadImage('https%3A%2F%2Fhappycoding.io%2Fimages%2Fstanley-1.jpg')%3B%0A%7D%0A%0Afunction%20draw()%20%7B%0A%20%20image(img%2C%200%2C%200)%3B%0A%0A%20%20%2F%2F%20Get%20the%20color%20at%20the%20mouse%20position%0A%20%20let%20c%20%3D%20img.get(mouseX%2C%20mouseY)%3B%0A%0A%20%20%2F%2F%20Change%20the%20fill%20to%20that%20color%0A%20%20fill(c)%3B%0A%0A%20%20%2F%2F%20Draw%20a%20square%20with%20that%20color%0A%20%20square(mouseX%2C%20mouseY%2C%2050)%3B%0A%7D%0A" style="width: 100%; background-color: white; border: 1px solid #ec245e; box-sizing: border-box; min-height: 380px"></iframe>
@@ -137,13 +137,13 @@ La siguiente tabla muestra un manual de usuario de la app de máscaras, lo que t
 
 ### Lupa
 
-La lupa se activa al hacer hover en la imagen
+La lupa se activa al hacer hover en la imagen.
 
 {{< p5-iframe sketch="/visualcomputing/sketches/ps002/image-processing/glass.js" ver="1.6.0" width="720" height="724" >}}
 
 ### Combinación
 
-Al hacer hover toda la imagen queda donde debería estar la lupa, los controles de teclado para el cambio de máscara siguen funcionando
+Al hacer hover toda la imagen queda donde debería estar la lupa, los controles de teclado para el cambio de máscara siguen funcionando.
 
 {{< p5-iframe sketch="/visualcomputing/sketches/ps002/image-processing/merge.js" ver="1.6.0" width="720" height="724" >}}
 
@@ -181,7 +181,7 @@ La razón de ser de esta decisión es simplificar en gran medida el código del 
 2. `maskType`: Tipo de máscara (para el condicional)
 3. `uTexture`: Imágen
 
-La ventaja de esta aproximación es que es bastante modular, lo que nos permite agregar más máscaras indiscriminadamente, y los únicos cambios que toca realizar son agregar una ramificación en el condicional del shader y otra en el condicional que se encuentra en la función `switchMask` del sketch
+La ventaja de esta aproximación es que es bastante modular, lo que nos permite agregar más máscaras indiscriminadamente, y los únicos cambios que toca realizar son agregar una ramificación en el condicional del shader y otra en el condicional que se encuentra en la función `switchMask` del sketch.
 
 <!-- https://chat.openai.com/share/75e3125f-baf7-4381-b49f-263fc86c00e3 -->
 
@@ -201,7 +201,7 @@ Al limitar el contexto proporcionado al modelo de ChatGPT, se buscó mostrar có
 
 ## Conclusiones
 
-Combinar una lupa que no utiliza shaders no es facil, puesto que el shader de la app de máscaras se aplica a la geometría, por eso toda la imagen se aplica en la parte de la lupa en la parte de la combinación.
+Combinar una lupa que no utiliza shaders no es fácil, puesto que el shader de la app de máscaras se aplica a la geometría, por eso toda la imagen se aplica en la parte de la lupa, en la parte de la combinación.
 
 ## Trabajo futuro
 
