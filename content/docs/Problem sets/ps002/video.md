@@ -1,3 +1,6 @@
+---
+title: Video
+---
 # Video Problem set 2
 
 El siguiente video es una descripción de este conjunto de ejercicios.
